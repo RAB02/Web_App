@@ -12,9 +12,12 @@ from . import views
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("accounts/signin", views.signIn, name="signin"),
-    path("accounts/signup", views.signUpPage, name="signup"),  # renamed here
-    path("accounts/register", views.register, name="register"),
-    path("accounts/tasks", views.tasks, name="tasks"),
+    path("signin", views.signIn, name="signin"),
+    path("signup", views.signUpPage, name="signup"),  # renamed here
+    path("register", views.register, name="register"),
+    path("tasks", views.tasks, name="tasks"),
+    path("tasks/<int:task_id>/done", views.mark_done, name="mark_done"),
+    path("tasks/<int:task_id>/delete", views.delete_task, name="delete_task"),
+    path("logout", views.logout_view, name="logout"),
 ]
 

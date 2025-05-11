@@ -19,3 +19,4 @@ class Tasks(models.Model):
     description = models.CharField(max_length=200)
     status = models.BooleanField(default=False)
     due_date = models.DateTimeField()
+    user = models.ForeignKey(signUp, on_delete=models.CASCADE, null=True, blank=True)
