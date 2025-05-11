@@ -23,7 +23,9 @@ def signIn(request):
         except signUp.DoesNotExist:
             messages.error(request, "Invalid email or password.")
 
-    return render(request, "sign_in.html", {})
+    return render(request, "sign_in.html", {"signed_in": False})
+
+
 # def signIn(request):
 #     if request.method == "POST":
 #         email = request.POST.get("email")
@@ -43,7 +45,7 @@ def signIn(request):
 
 # ✅ Sign up page view — RENAMED to avoid conflict
 def signUpPage(request):
-    return render(request, "sign_up.html")
+    return render(request, "sign_up.html", {"signed_in": False})
 
 
 # Register POST handler
@@ -69,6 +71,7 @@ def register(request):
         return redirect("home")
 
     return redirect("signup")
+
 
 def tasks(request):
     user_id = request.session.get("user_id")
@@ -96,10 +99,12 @@ def tasks(request):
         task.save()
         return redirect("tasks")
 
-    return render(request, "tasks.html", {
-        "tasks": tasks,
-        "user_first_name": user_first_name
-    })
+    return render(
+        request,
+        "base.html",
+        {"tasks": tasks, "user_first_name": user_first_name, "signed_in": True},
+    )
+
 
 def mark_done(request, task_id):
     if request.method == "POST":
@@ -109,12 +114,14 @@ def mark_done(request, task_id):
         task.save()
     return redirect("tasks")
 
+
 def delete_task(request, task_id):
     if request.method == "POST":
         user_id = request.session.get("user_id")
         task = get_object_or_404(Tasks, id=task_id, user_id=user_id)
         task.delete()
     return redirect("tasks")
+
 
 def logout_view(request):
     request.session.flush()  # Clears all session data
